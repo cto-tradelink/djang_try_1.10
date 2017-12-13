@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+#MYSQL
+#postgreSQL
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,6 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# 프로덕션에 사용됨.
 SECRET_KEY = 'h+bq8ocxp=x(pg8xwp-gj+5$i1w=1k2mi@h6c2x+f!wf6evw3p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -29,7 +33,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
+# 각목록을 구글에서 검색하면 코어 코드를 열람할수 있음.
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,9 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'try_text.app.TryTestConfig'
+     #custom App
+    'try_test.apps.TryTestConfig'
 ]
 
+
+# USING IN REQUEST.
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -119,3 +126,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SHORTCODE_MAX = 10
+
+
+
+# django 에선 서브 도메인을 관리할수 있게 해쥼 캬~
+# django-hosts : https://django-hosts.readthedocs.io/en/latest/
+# pip install django-host
+# installed app 에 django-host 추가
+# Add 'django_hosts' to your INSTALLED_APPS setting.
+# Add 'django_hosts.middleware.HostsRequestMiddleware' to the beginning of your MIDDLEWARE or MIDDLEWARE_CLASSES setting.
+# Add 'django_hosts.middleware.HostsResponseMiddleware' to the end of your MIDDLEWARE or MIDDLEWARE_CLASSES setting.
+# Create a new module containing your default host patterns, e.g. in the hosts.py file next to your urls.py.
+# Set the ROOT_HOSTCONF setting to the dotted Python import path of the module containing your host patterns, e.g.:
+
+# ROOT_HOSTCONF = 'mysite.hosts'
+# Set the DEFAULT_HOST setting to the name of the host pattern you want to refer to as the default pattern. It’ll be used if no other pattern matches or you don’t give a name to the host_url template tag.
