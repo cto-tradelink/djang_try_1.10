@@ -22,6 +22,6 @@ urlpatterns = [
     url(r'^view-1/$',shorturl_redirect_view),
     url(r'^view-2/$', ShortUrlCBView.as_view()),
     url(r'^a/(?P<shortcode>[\w-]){6, 15}$', ShortUrlCBView.as_view()), #min6~max15 자리까지 인식
-    url(r'^b/(?P<shortcode>[\w-]){6, 15}$', shorturl_redirect_view),
+    url(r'^b/(?P<shortcode>[\w-])$', shorturl_redirect_view),
 
 ]

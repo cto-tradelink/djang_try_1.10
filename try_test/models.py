@@ -6,6 +6,8 @@ from try_django_0.settings import *  # 이렇게 하면 안되나? 차이가 뭐
 # django 의 from 에서 경로는 프로젝트의 루트( 여기서는 try_django_0 ) 을 기준으로 함.
 # 각 파일이 위치한 곳 기준이 아님( 절대 경로 사용시에 )
 
+from .validator import *
+
 
 SHORTCODE_MAX = getattr( settings , "SHORTCODE_MAX" , 15)
 # 이 코드는  SHORTCODE_MAX = settings.SHORT_CODE 와 같음.
@@ -30,7 +32,7 @@ class ShortUrlManager(models.Manager):
         return "New codes made : {i}".format(i=newcode)
 
 class ShortUrl(models.Model):
-    url = models.CharField(max_length=220, )
+    url = models.CharField(max_length=220, validators= [validate_dot_com, validate_url]) # 이렇게 작성해주면 어드민에도 밸리데이터가 적용됨.
     shortcode = models.CharField(max_length=30, unique=True, blank=True)
     #shortcode = models.CharField(max_length=30, null=true) => empty in database is okay
     #shortcode = models.CharField(max_length=30, default="cfe") => 디폴트 옵션
@@ -74,3 +76,5 @@ class ShortUrl(models.Model):
     print(obj3)  이미 있는 경우 저장된 object
 
     '''
+    def get_absolute_url(self):
+        return "htst/{shortcode}".format(shortcode=self.shortcode)

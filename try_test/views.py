@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
 from .models import *
 from django.shortcuts import render, get_object_or_404
-
+from .forms import SubmitUrlForm
 
 # Create your views here.
 def shorturl_redirect_view(request,shortcode, *args, **kargs):
@@ -27,15 +27,40 @@ def shorturl_redirect_view(request,shortcode, *args, **kargs):
     return HttpResponseRedirect(obj.url) # 해당 url 로 바로 이동~
 
 class ShortUrlCBView(View):
-    def get(self,request,shortcode, *args, **kwargs):
+    def get(self,request,shortcode=None, *args, **kwargs):
     #def get(self,request, slug=None, *args, **kwargs):
         print(args)
         print(kwargs)
+        form = SubmitUrlForm
+        context = {
+            "title":"submit url",
+            "form": form
+        }
+        #obj = get_object_or_404(ShortUrl, shortcode=shortcode)
+        return render(request,"try_django/html.html", context)
 
-        obj = get_object_or_404(ShortUrl, shortcode=shortcode)
-        return HttpResponse ("hello again")
-    def post(self,request,shortcode, *args, **kwargs):
+    def post(self,request,shortcode=None, *args, **kwargs):
         some_dict = {}
         #some_dict["url"] 이코드는 에러를 발생 시킴
         #some_dict.get("url","http://google.com") 에러를 발생시키지 않음. url 이 없으면 http://google.com 을 리턴
-        return "post"
+        form = SubmitUrlForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data.get("url"))
+            new_url = form.cleaned_data.get("url")
+            obj,created = ShortUrl.objects.get_or_create(url=new_url)
+            new_context = {
+                "object":obj,
+                "created":created,
+            }
+            if created:
+                return render(request, "try_django/success.html", new_context)
+            else:
+                return render(request, "try_django/already.html",new_context)
+
+        form = SubmitUrlForm(request.POST)
+        context = {
+            "form":form
+        }
+        if form.is_valid():
+            print(form.cleaned_data)
+        return render(request,"try_django/html.html",context)
